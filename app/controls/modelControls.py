@@ -18,7 +18,7 @@ import cadquery as cq
 import os
 import time
 import console
-
+from cairosvg import svg2png
 
 EXPORT_NAME = 'model'
 PREVIEW_NAME = 'preview.svg'
@@ -50,6 +50,10 @@ def __generate_preview_image(model, image_name, color ):
         "projectionDir": (1, 0.1, 1),
         "showAxes": True,
     })
+    cairosvg.svg2png(url="app/static/prev1.svg", write_to="app/static/prev1.png")
+    cairosvg.svg2png(url="app/static/prev2.svg", write_to="app/static/prev2.png")
+    cairosvg.svg2png(url="app/static/prev3.svg", write_to="app/static/prev3.png")
+    
 
 def __stl_preview(color):
     # Load and embed the JavaScript file
@@ -77,6 +81,9 @@ def __stl_preview(color):
         r'</script>'+
         r'<stl-viewer model="./app/static/model.stl?cache='+str(time.time())+r'"></stl-viewer>'+
         r'</div>',
+        r'<img src="app/static/prev1.png">',
+        r'<img src="app/static/prev2.png">',
+        r'<img src="app/static/prev3.png">',
         height = 500
     )
 
@@ -95,7 +102,7 @@ def make_model_controls(
         #create the model file for downloading
         cq.exporters.export(model,f'{EXPORT_NAME}.{export_type}')
         cq.exporters.export(model,'app/static/'+f'{EXPORT_NAME}.stl')
-        #__generate_preview_image(model, PREVIEW_NAME, color)
+        __generate_preview_image(model, PREVIEW_NAME, color)
         
 
         end = time.time()
