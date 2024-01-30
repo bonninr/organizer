@@ -1,4 +1,4 @@
-# Copyright 2023 James Adams
+# Copyright 2024 Rodolfo Bonnin
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,24 +25,31 @@ EXPORT_NAME = 'model'
 PREVIEW_NAME = 'preview.svg'
 
 def __generate_model(parameters):
-    model=console.generate_console()
+    model=console.generate_general_console(parameters)
     return model
 
 
 
-def __generate_preview_image(model, image_name, camera):
+def __generate_preview_image(model, image_name, color ):
     #create the preview image
-    hex_1 = color1.lstrip('#')
+    hex_1 = color.lstrip('#')
     rgb_1 = tuple(int(hex_1[i:i+2], 16) for i in (0, 2, 4))
 
-    hex_2 = color2.lstrip('#')
+    hex_2 = color.lstrip('#')
     rgb_2 = tuple(int(hex_2[i:i+2], 16) for i in (0, 2, 4))
-    cq.exporters.export(model, image_name, opt={
-        "projectionDir": (camera['axis1'], camera['axis2'], camera['axis3']),
+    cq.exporters.export(model.rotate((0,0,0), (1,0,0), -90), "app/static/prev1.svg", opt={
+        "projectionDir": (1, 0.1, 1),
         "showAxes": True,
-        "focus": camera['focus'],
-        "strokeColor": rgb_1,
-        "hiddenColor": rgb_2
+    })
+
+    cq.exporters.export(model.rotate((0,0,0), (1,0,0), -90).rotate((0,0,0), (0,1,0), -45), "app/static/prev2.svg", opt={
+        "projectionDir": (1, 0.1, 1),
+        "showAxes": True,
+    })
+
+    cq.exporters.export(model.rotate((0,0,0), (1,0,0), -90).rotate((0,0,0), (0,1,0), -90), "app/static/prev3.svg", opt={
+        "projectionDir": (1, 0.1, 1),
+        "showAxes": True,
     })
 
 def __stl_preview(color):
@@ -67,7 +74,6 @@ def __stl_preview(color):
         three_js+' '+
         stl_loader+' '+
         orbital_controls+' '+
-        'console.log(\'frizzle\');'+
         stl_viewer_component+' '+
         r'</script>'+
         r'<stl-viewer model="./app/static/model.stl?cache='+str(time.time())+r'"></stl-viewer>'+
@@ -90,7 +96,7 @@ def make_model_controls(
         #create the model file for downloading
         cq.exporters.export(model,f'{EXPORT_NAME}.{export_type}')
         cq.exporters.export(model,'app/static/'+f'{EXPORT_NAME}.stl')
-        #__generate_preview_image(model, PREVIEW_NAME, color1, color2, camera)
+        #__generate_preview_image(model, PREVIEW_NAME, color)
         
 
         end = time.time()

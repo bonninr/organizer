@@ -1,4 +1,4 @@
-# Copyright 2023 James Adams
+# Copyright 2024 Rodolfo Bonnin
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,34 +13,19 @@
 # limitations under the License.
 
 import streamlit as st
+import console_parameters
 
-def make_parameter_controls():
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        length = st.number_input("Length",min_value=1.0,value=25.0,step=1.0)
-    with col2:
-        width = st.number_input("Width",min_value=1.0,value=4.0,step=1.0)
-    with col3:
-        height = st.number_input("height",min_value=1.0, value=75.0,step=1.0)
 
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        rail_width = st.number_input("Rail width",min_value=1.0,value=2.0, step=1.0)
-    with col2:
-        rung_height = st.number_input("Rung Height",min_value=0.1,value=2.0, step=1.0)
-    with col3:
-        rung_width = st.number_input("Rung Width",min_value=1.0,value=2.0, step=1.0)
-    
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        rung_padding = st.number_input("Rung Padding",min_value=0.0,value=6.0, step=1.0)
-
-    return {
-        'length':length,
-        'width':width,
-        'height':height,
-        'rail_width':rail_width,
-        'rung_height':rung_height,
-        'rung_width':rung_width,
-        'rung_padding':rung_padding
-    }
+return_variables={}
+def make_parameter_controls(organ_type):
+    parameters=console_parameters.organ_types[organ_type]
+    for category, parameters in parameters.items():
+        cols = st.columns(len(parameters))
+        for col, parameter in zip(cols, parameters):
+            for key, value in parameter.items():
+                name = key.replace('_', ' ').capitalize()
+                min_value = value * 0.5
+                max_value = value * 1.5
+                with col:
+                    return_variables[key] = st.number_input(name, min_value=min_value, value=float(value), max_value=max_value, step=1.0)
+    return return_variables

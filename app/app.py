@@ -1,4 +1,4 @@
-# Copyright 2023 James Adams
+# Copyright 2024 Rodolfo Bonnin
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,12 +23,24 @@ from controls import (
 )
 
 def __make_ui():
-    tab1, tab2 = st.tabs(["Parameters", "File"])
+    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["General console", "Portative console", "Minimalist console","Studio Console", "Vertical console", "Download CAD"])
+    
     with tab1:
-        col1, col2, col3 = st.columns(3)
-        model_parameters = make_parameter_controls()
+        model_parameters = make_parameter_controls("general")
 
     with tab2:
+        model_parameters = make_parameter_controls("portative")
+    
+    with tab3:
+        model_parameters = make_parameter_controls("studio")
+
+    with tab4:
+        model_parameters = make_parameter_controls("minimalist")
+
+    with tab5:
+        model_parameters = make_parameter_controls("vertical")
+
+    with tab6:
         file_controls = make_file_controls()
 
     _, col2, _= st.columns(3)
@@ -54,7 +66,7 @@ def __make_ui():
 if __name__ == "__main__":
     st.set_page_config(
         page_title="Organizer - VPO console plans creator",
-        page_icon="🧊"
+        page_icon=""
     )
 
     #st.title('CadQuery Box Test')

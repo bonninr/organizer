@@ -42,9 +42,11 @@ class STLViewer extends HTMLElement {
     console.log("made it this far");
 
     new THREE.STLLoader().load(model, (geometry) => {
-      let material = new THREE.MeshPhongMaterial({
+      let material = new THREE.MeshStandardMaterial({
         color: {__REPLACE_COLOR__},
         specular: 100,
+        roughness:0,
+        transparent:true,
         shininess: 20,
       });
       let mesh = new THREE.Mesh(geometry, material);
@@ -53,7 +55,8 @@ class STLViewer extends HTMLElement {
       mesh.rotation.x = Math.PI *1.5  ;
       scene.add(mesh);
   
-
+      var ambientLight = new THREE.AmbientLight('#555');
+      scene.add(ambientLight);
 
       const loader = new THREE.TextureLoader();
       loader.load('https://images.pexels.com/photos/11421550/pexels-photo-11421550.jpeg' , function(texture)
@@ -61,7 +64,7 @@ class STLViewer extends HTMLElement {
              scene.background = texture;  
             });
 
-      var geo = new THREE.PlaneBufferGeometry(2000, 2000, 8, 8);
+      var geo = new THREE.PlaneBufferGeometry(800, 1500, 8, 8);
       var mat = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide });
       var plane = new THREE.Mesh(geo, mat);
       plane.rotateX( - Math.PI / 2);
@@ -80,7 +83,7 @@ class STLViewer extends HTMLElement {
       camera.position.x = 30;
 
       controls.autoRotate = true;
-      controls.autoRotateSpeed = 1;
+      controls.autoRotateSpeed = 2;
       let animate = () => {
         controls.update();
         renderer.render(scene, camera);

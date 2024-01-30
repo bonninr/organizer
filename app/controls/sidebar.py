@@ -1,4 +1,4 @@
-# Copyright 2023 James Adams
+# Copyright 2024 Rodolfo Bonnin
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,5 +16,10 @@ import streamlit as st
 
 def make_sidebar():
     with st.sidebar:
-        st.title('Organizer!')
-        st.markdown("In development")
+        st.markdown("![](/app/static/logo.jpg)")
+        st.title('Openpipes Organizer: Create your own personalized VPO console')
+        st.markdown("By: Rodolfo Bonnin")
+        organtype=st.selectbox(
+    "Choose the type of console to be created:",
+    ("General", "Portative", "Minimalist", "Studio", "Vertical"))
+    return organtype
