@@ -98,7 +98,7 @@ def make_model_controls(
         #create the model file for downloading
         cq.exporters.export(model,f'{EXPORT_NAME}.{export_type}')
         cq.exporters.export(model,'app/static/'+f'{EXPORT_NAME}.stl')
-        __generate_preview_image(model, PREVIEW_NAME, color)
+        #__generate_preview_image(model, PREVIEW_NAME, color)
         
 
         end = time.time()
