@@ -43,10 +43,14 @@ def __make_ui():
     with tab6:
         file_controls = make_file_controls()
 
-    _, col2, _= st.columns(3)
+    col1, col2, _= st.columns(3)
     with col2:
         color1 = st.color_picker('Primary Color', '#E0BD00')
-    
+    with col1:
+        organtype=st.selectbox(
+    "Console type to generate:",
+    ("General", "Portative", "Minimalist", "Studio", "Vertical"))
+        
     if 'key'not in st.session_state:
         st.session_state['key'] = 0
     else:
@@ -57,7 +61,8 @@ def __make_ui():
         make_model_controls(
             model_parameters,
             color1, 
-            file_controls
+            file_controls,
+            organtype
         )
     else:
         st.write("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⬆️Please click the \"Generate Model\" Button")

@@ -23,23 +23,15 @@ general_parameters = {
 
 portative_parameters = {
     "p_General_and_base": [
-        {"organ_internal_width_p": 1300},
-        {"general_board_thickness_p": 18},
-        {"base_height_p": 800},
-        {"base_depth_p": 350},
-        {"base_front_distance_p": 10}
-    ],
-    "P_Volume_pedals": [
-        {"volume_pedals_width_p": 12},
-        {"volume_pedals_height_p": 24},
-        {"volume_pedals_number_p": 2},
-        {"volume_pedals_hole_start_height_p": 140}
+        {"internal_width": 850},
+        {"total_depth_p": 350},
+        {"lateral_board_thickness": 18}
     ],
     "P_Top": [
-        {"top_depth_p": 650},
-        {"top_height_p": 350},
-        {"top_notch_start_x_p": 350},
-        {"top_notch_start_y_p": 150}
+        {"back_box_depth": 200},
+        {"total_height": 110},
+        {"top_notch_start_x_p": 200},
+        {"top_notch_start_y_p": 50}
     ]
 }
 

@@ -23,8 +23,8 @@ import console
 EXPORT_NAME = 'model'
 PREVIEW_NAME = 'preview.svg'
 
-def __generate_model(parameters):
-    model=console.generate_general_console(parameters)
+def __generate_model(parameters, organ_type):
+    model=console.generate_console(parameters, organ_type)
     return model
 
 
@@ -87,13 +87,14 @@ def __stl_preview(color):
 def make_model_controls(
     parameters,
     color,
-    file_controls
+    file_controls,
+    organ_type
 ):
     start = time.time()
     with st.spinner('Generating Model..'):
         download_name = file_controls['name']
         export_type = file_controls['type'] 
-        model = __generate_model(parameters)
+        model = __generate_model(parameters, organ_type)
 
         #create the model file for downloading
         cq.exporters.export(model,f'{EXPORT_NAME}.{export_type}')

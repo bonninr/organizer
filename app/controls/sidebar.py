@@ -17,9 +17,5 @@ import streamlit as st
 def make_sidebar():
     with st.sidebar:
         st.markdown("![](/app/static/logo.jpg)")
-        st.title('Openpipes Organizer: Create your own personalized VPO console')
+        st.title('Openpipes Organizer: Create your own personalized VPO console [Experimental]')
         st.markdown("By: Rodolfo Bonnin")
-        organtype=st.selectbox(
-    "Choose the type of console to be created:",
-    ("General", "Portative", "Minimalist", "Studio", "Vertical"))
-    return organtype
