@@ -61,7 +61,7 @@ class STLViewer extends HTMLElement {
         map: woodTexture,
 
         roughness: 0,
-        transmission: 0.5,
+        transmission: 1,
         clearcoat: 1,
         
       });
@@ -75,7 +75,7 @@ class STLViewer extends HTMLElement {
 
               // Add spotlight for product showcase effect
               const spotLight = new THREE.SpotLight(0xffffff);
-              spotLight.position.set(8000, 8000, 8000);
+              spotLight.position.set(1000, 1000, 1000);
               spotLight.castShadow = true;
               spotLight.angle = Math.PI / 6;
               spotLight.penumbra = 0.1;
@@ -85,12 +85,12 @@ class STLViewer extends HTMLElement {
 
               // Add a point light for extra illumination
               const pointLight = new THREE.PointLight(0xffffff, 1, 100);
-              pointLight.position.set(-5000, -5000, -5000);
+              pointLight.position.set(-1000, -1000, -1000);
               scene.add(pointLight);
       
       // Add a point light for extra illumination
               const pointLight2 = new THREE.PointLight(0xffffff, 1, 100);
-              pointLight.position.set(5000, -5000, -5000);
+              pointLight.position.set(1000, -1000, -1000);
               scene.add(pointLight2);
 
       const loader = new THREE.TextureLoader();
