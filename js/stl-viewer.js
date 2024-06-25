@@ -32,7 +32,6 @@ class STLViewer extends HTMLElement {
     // Create a cube with wooden texture and glossy effect
     const geometry = new THREE.BoxGeometry();
     const material = new THREE.MeshStandardMaterial({
-        map: woodTexture,
         roughness: 0.2,  // Low roughness for glossiness
         metalness: 0.6,  // Some metalness for reflective quality
     });
