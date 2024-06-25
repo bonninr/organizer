@@ -82,7 +82,7 @@ class STLViewer extends HTMLElement {
         }
       };
       animate();
-    });
+    };
   }
 
   disconnectedCallback() {
