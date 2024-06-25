@@ -60,8 +60,8 @@ class STLViewer extends HTMLElement {
       const material2 = new THREE.MeshPhysicalMaterial({
         map: woodTexture,
 
-        roughness: 0,
-        transmission: 1,
+        roughness: 0.2,
+        transmission: 0.5,
         clearcoat: 1,
         
       });
@@ -69,14 +69,14 @@ class STLViewer extends HTMLElement {
       scene.add(cube);
 
 
-      const ambientLight = new THREE.AmbientLight(0x404040, 0.5); // soft white light
+      const ambientLight = new THREE.AmbientLight(0x404040, 0.2); // soft white light
       scene.add(ambientLight);
   
-      const keyLight = new THREE.DirectionalLight(0xffffff,  1);
+      const keyLight = new THREE.DirectionalLight(0xffffff,  0.7);
       keyLight.position.set(-100, 100, 100);
       scene.add(keyLight);
   
-      const fillLight = new THREE.DirectionalLight(0xffffff, 1);
+      const fillLight = new THREE.DirectionalLight(0xffffff, 0.75);
       fillLight.position.set(100, 100, 100);
       scene.add(fillLight);
   
