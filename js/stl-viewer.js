@@ -69,29 +69,20 @@ class STLViewer extends HTMLElement {
       scene.add(cube);
 
 
-      var ambientLight = new THREE.AmbientLight('#555');
-      //scene.add(ambientLight);
-
-
-              // Add spotlight for product showcase effect
-              const spotLight = new THREE.SpotLight(0xffffff);
-              spotLight.position.set(1000, 1000, 1000);
-              spotLight.castShadow = true;
-              spotLight.angle = Math.PI / 6;
-              spotLight.penumbra = 0.1;
-              spotLight.decay = 2;
-              spotLight.distance = 200;
-              //scene.add(spotLight);
-
-              // Add a point light for extra illumination
-              const pointLight = new THREE.PointLight(0xffffff, 1, 100);
-              pointLight.position.set(-1000, -1000, -1000);
-              scene.add(pointLight);
-      
-      // Add a point light for extra illumination
-              const pointLight2 = new THREE.PointLight(0xffffff, 1, 100);
-              pointLight.position.set(1000, -1000, -1000);
-              scene.add(pointLight2);
+      const ambientLight = new THREE.AmbientLight(0x404040, 2); // soft white light
+      scene.add(ambientLight);
+  
+      const keyLight = new THREE.DirectionalLight(0xffffff, 1.0);
+      keyLight.position.set(-100, 100, 100);
+      scene.add(keyLight);
+  
+      const fillLight = new THREE.DirectionalLight(0xffffff, 0.75);
+      fillLight.position.set(100, 100, 100);
+      scene.add(fillLight);
+  
+      const backLight = new THREE.DirectionalLight(0xffffff, 1.0);
+      backLight.position.set(0, 100, -100).normalize();
+      scene.add(backLight);
 
       const loader = new THREE.TextureLoader();
       loader.load('https://images.pexels.com/photos/11421550/pexels-photo-11421550.jpeg' , function(texture)
