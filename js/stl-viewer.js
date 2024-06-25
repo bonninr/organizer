@@ -53,10 +53,11 @@ class STLViewer extends HTMLElement {
       mesh.rotation.x = Math.PI *1.5  ;
       scene.add(mesh);
   
-
-      const cube = new THREE.Mesh(geometry, material);
+      const geometry2 = new THREE.BoxGeometry();
+      const cube = new THREE.Mesh(geometry2, material);
       scene.add(cube);
 
+      const geometry = new THREE.BoxGeometry();
       var ambientLight = new THREE.AmbientLight('#555');
       //scene.add(ambientLight);
 
