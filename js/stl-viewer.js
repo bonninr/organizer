@@ -57,7 +57,7 @@ class STLViewer extends HTMLElement {
       const cube = new THREE.Mesh(geometry2, material);
       scene.add(cube);
 
-      const geometry = new THREE.BoxGeometry();
+
       var ambientLight = new THREE.AmbientLight('#555');
       //scene.add(ambientLight);
 
