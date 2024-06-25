@@ -70,7 +70,7 @@ class STLViewer extends HTMLElement {
 
 
       var ambientLight = new THREE.AmbientLight('#555');
-      scene.add(ambientLight);
+      //scene.add(ambientLight);
 
 
               // Add spotlight for product showcase effect
