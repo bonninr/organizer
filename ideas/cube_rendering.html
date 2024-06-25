@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rotating Cube with Product Showcase Lights</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/RGBELoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/pmrem/PMREMGenerator.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/pmrem/PMREMCubeUVPacker.js"></script>
+    <script>
+        // Set up the scene, camera, and renderer
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Load the texture
+        const textureLoader = new THREE.TextureLoader();
+        const woodTexture = textureLoader.load('http://localhost:8000/Ash-Wood-Seamless-Texture-7.jpg'); // Replace with your texture URL
+
+        // Load HDR environment map
+        const pmremGenerator = new THREE.PMREMGenerator(renderer);
+        pmremGenerator.compileEquirectangularShader();
+
+        new THREE.RGBELoader()
+            .setDataType(THREE.UnsignedByteType)
+            .setPath('http://localhost:8000/')
+            .load('studio_small_03_4k.hdr', function (texture) {
+                const envMap = pmremGenerator.fromEquirectangular(texture).texture;
+                scene.environment = envMap;
+                texture.dispose();
+                pmremGenerator.dispose();
+
+                // Create a cube with wooden texture and glossy effect
+                const geometry = new THREE.BoxGeometry();
+				
+				const material = new THREE.MeshPhysicalMaterial({
+					map: woodTexture,
+					envMap: envMap,
+					roughness: 0,
+					transmission: 0.5,
+					clearcoat: 1,
+					envMapIntensity: 0.3
+					
+				});
+                const material2 = new THREE.MeshStandardMaterial({
+                    map: woodTexture,
+                    roughness: 0.2,  // Low roughness for glossiness
+                    metalness: 0.6,  // Some metalness for reflective quality
+                    envMap: envMap,
+                    envMapIntensity: 1.0
+                });
+                const cube = new THREE.Mesh(geometry, material);
+                scene.add(cube);
+
+                // Position the camera
+                camera.position.z = 4;
+
+                // Add ambient light
+                const ambientLight = new THREE.AmbientLight(0x404040); // Soft white light
+                scene.add(ambientLight);
+
+                // Add spotlight for product showcase effect
+                const spotLight = new THREE.SpotLight(0xffffff);
+                spotLight.position.set(8, 8, 8);
+                spotLight.castShadow = true;
+                spotLight.angle = Math.PI / 6;
+                spotLight.penumbra = 0.1;
+                spotLight.decay = 2;
+                spotLight.distance = 200;
+                //scene.add(spotLight);
+
+                // Add a point light for extra illumination
+                const pointLight = new THREE.PointLight(0xffffff, 1, 100);
+                pointLight.position.set(-5, -5, -5);
+                scene.add(pointLight);
+				
+				// Add a point light for extra illumination
+                const pointLight2 = new THREE.PointLight(0xffffff, 1, 100);
+                pointLight.position.set(5, -5, -5);
+                scene.add(pointLight2);
+
+                // Animation loop
+                function animate() {
+                    requestAnimationFrame(animate);
+
+                    // Rotate the cube
+                    cube.rotation.x += 0.01;
+                    cube.rotation.y += 0.01;
+
+                    renderer.render(scene, camera);
+                }
+                animate();
+            });
+    </script>
+</body>
+</html>

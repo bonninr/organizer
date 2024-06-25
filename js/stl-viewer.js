@@ -39,30 +39,20 @@ class STLViewer extends HTMLElement {
     let scene = new THREE.Scene();
     scene.add(new THREE.HemisphereLight(0xffffff, 1.5));
 
-    console.log("made it this far");
+    const textureLoader = new THREE.TextureLoader();
+    const woodTexture = textureLoader.load('{st.get_media_url("media/Ash-Wood-Seamless-Texture-7.jpg")}'); // Replace with your texture URL
 
-    new THREE.STLLoader().load(model, (geometry) => {
-      let material = new THREE.MeshStandardMaterial({
-        color: {__REPLACE_COLOR__},
-        specular: 100,
-        roughness:0,
-        transparent:true,
-        shininess: 20,
+      const geometry = new THREE.BoxGeometry();
+      const material = new THREE.MeshStandardMaterial({
+          map: woodTexture,
+          roughness: 0.2,  // Low roughness for glossiness
+          metalness: 0.6,  // Some metalness for reflective quality
       });
-      let mesh = new THREE.Mesh(geometry, material);
-      mesh.castShadow = true
-      mesh.receiveShadow = true
-      mesh.rotation.x = Math.PI *1.5  ;
-      scene.add(mesh);
+      const cube = new THREE.Mesh(geometry, material);
+      scene.add(cube);
   
       var ambientLight = new THREE.AmbientLight('#555');
       scene.add(ambientLight);
-
-      const loader = new THREE.TextureLoader();
-      loader.load('https://images.pexels.com/photos/11421550/pexels-photo-11421550.jpeg' , function(texture)
-            {
-             scene.background = texture;  
-            });
 
       var geo = new THREE.PlaneBufferGeometry(800, 1500, 8, 8);
       var mat = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide });
