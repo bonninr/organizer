@@ -81,7 +81,7 @@ class STLViewer extends HTMLElement {
       scene.add(fillLight);
   
       const backLight = new THREE.DirectionalLight(0xffffff, 0.7);
-      backLight.position.set(0, 200, -200).normalize();
+      backLight.position.set(0, 100, -100);
       scene.add(backLight);
 
       const loader = new THREE.TextureLoader();
