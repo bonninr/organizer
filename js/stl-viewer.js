@@ -37,7 +37,7 @@ class STLViewer extends HTMLElement {
     let controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableZoom = true;
     let scene = new THREE.Scene();
-    scene.add(new THREE.HemisphereLight(0xffffff, 1.5));
+
 
     console.log("made it this far");
 
