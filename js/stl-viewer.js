@@ -34,54 +34,54 @@ class STLViewer extends HTMLElement {
       camera.aspect = container.clientWidth / container.clientHeight;
       camera.updateProjectionMatrix();
     }, false);
+
     let controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableZoom = true;
+
     let scene = new THREE.Scene();
     scene.add(new THREE.HemisphereLight(0xffffff, 1.5));
 
     const textureLoader = new THREE.TextureLoader();
     const woodTexture = textureLoader.load('https://images.pexels.com/photos/11421550/pexels-photo-11421550.jpeg')
-      const geometry = new THREE.BoxGeometry();
-      const material = new THREE.MeshStandardMaterial({
-          map: woodTexture,
-          roughness: 0.2,  // Low roughness for glossiness
-          metalness: 0.6,  // Some metalness for reflective quality
-      });
-      const cube = new THREE.Mesh(geometry, material);
-      scene.add(cube);
+    const geometry = new THREE.BoxGeometry();
+    const material = new THREE.MeshStandardMaterial({
+      map: woodTexture,
+      roughness: 0.2,  // Low roughness for glossiness
+      metalness: 0.6,  // Some metalness for reflective quality
+    });
+    const cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
   
-      var ambientLight = new THREE.AmbientLight('#555');
-      scene.add(ambientLight);
+    var ambientLight = new THREE.AmbientLight('#555');
+    scene.add(ambientLight);
 
-      var geo = new THREE.PlaneBufferGeometry(800, 1500, 8, 8);
-      var mat = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide });
-      var plane = new THREE.Mesh(geo, mat);
-      plane.rotateX( - Math.PI / 2);
-      plane.position.y -= 600;
+    var geo = new THREE.PlaneBufferGeometry(800, 1500, 8, 8);
+    var mat = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide });
+    var plane = new THREE.Mesh(geo, mat);
+    plane.rotateX( - Math.PI / 2);
+    plane.position.y -= 600;
 
-      scene.add(plane);
+    scene.add(plane);
 
+    let middle = new THREE.Vector3();
+    geometry.computeBoundingBox();
+    geometry.boundingBox.getCenter(middle);
+    cube.geometry.applyMatrix4(new THREE.Matrix4().makeTranslation(-middle.x, -middle.y, -middle.z));
+    let largestDimension = Math.max(geometry.boundingBox.max.x, geometry.boundingBox.max.y, geometry.boundingBox.max.z)
+    camera.position.z = largestDimension * 1.8;
+    camera.position.y = 20;
+    camera.position.x = 30;
 
-      let middle = new THREE.Vector3();
-      geometry.computeBoundingBox();
-      geometry.boundingBox.getCenter(middle);
-      mesh.geometry.applyMatrix4(new THREE.Matrix4().makeTranslation(-middle.x, -middle.y, -middle.z));
-      let largestDimension = Math.max(geometry.boundingBox.max.x, geometry.boundingBox.max.y, geometry.boundingBox.max.z)
-      camera.position.z = largestDimension * 1.8;
-      camera.position.y = 20;
-      camera.position.x = 30;
-
-      controls.autoRotate = true;
-      controls.autoRotateSpeed = 2;
-      let animate = () => {
-        controls.update();
-        renderer.render(scene, camera);
-        if (this.connected) {
-          requestAnimationFrame(animate);
-        }
-      };
-      animate();
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 2;
+    let animate = () => {
+      controls.update();
+      renderer.render(scene, camera);
+      if (this.connected) {
+        requestAnimationFrame(animate);
+      }
     };
+    animate();
   }
 
   disconnectedCallback() {
