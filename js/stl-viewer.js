@@ -42,12 +42,10 @@ class STLViewer extends HTMLElement {
     console.log("made it this far");
 
     new THREE.STLLoader().load(model, (geometry) => {
-      let material = new THREE.MeshStandardMaterial({
-        color: {__REPLACE_COLOR__},
-        specular: 100,
-        roughness:0,
-        transparent:true,
-        shininess: 20,
+      let  material = new THREE.MeshPhysicalMaterial({
+        roughness: 0,
+        transmission: 0.5,
+        clearcoat: 1
       });
       let mesh = new THREE.Mesh(geometry, material);
       mesh.castShadow = true
