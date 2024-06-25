@@ -72,6 +72,27 @@ class STLViewer extends HTMLElement {
       var ambientLight = new THREE.AmbientLight('#555');
       scene.add(ambientLight);
 
+
+              // Add spotlight for product showcase effect
+              const spotLight = new THREE.SpotLight(0xffffff);
+              spotLight.position.set(8000, 8000, 8000);
+              spotLight.castShadow = true;
+              spotLight.angle = Math.PI / 6;
+              spotLight.penumbra = 0.1;
+              spotLight.decay = 2;
+              spotLight.distance = 200;
+              //scene.add(spotLight);
+
+              // Add a point light for extra illumination
+              const pointLight = new THREE.PointLight(0xffffff, 1, 100);
+              pointLight.position.set(-5000, -5000, -5000);
+              scene.add(pointLight);
+      
+      // Add a point light for extra illumination
+              const pointLight2 = new THREE.PointLight(0xffffff, 1, 100);
+              pointLight.position.set(5000, -5000, -5000);
+              scene.add(pointLight2);
+
       const loader = new THREE.TextureLoader();
       loader.load('https://images.pexels.com/photos/11421550/pexels-photo-11421550.jpeg' , function(texture)
             {
