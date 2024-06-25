@@ -53,8 +53,20 @@ class STLViewer extends HTMLElement {
       mesh.rotation.x = Math.PI *1.5  ;
       //scene.add(mesh);
   
+      const woodtextureLoader = new THREE.TextureLoader();
+      const woodTexture = textureLoader.load('https://images.pexels.com/photos/11421550/pexels-photo-11421550.jpeg'); // Replace with your texture URL
+
       const geometry2 = new THREE.BoxGeometry(1000,1000,1000);
-      const cube = new THREE.Mesh(geometry2, material);
+      const material2 = new THREE.MeshPhysicalMaterial({
+        map: woodTexture,
+        envMap: envMap,
+        roughness: 0,
+        transmission: 0.5,
+        clearcoat: 1,
+        envMapIntensity: 0.3
+        
+      });
+      const cube = new THREE.Mesh(geometry2, material2);
       scene.add(cube);
 
 
