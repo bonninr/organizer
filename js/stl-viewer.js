@@ -70,7 +70,7 @@ class STLViewer extends HTMLElement {
 
 
       var ambientLight = new THREE.AmbientLight('#555');
-      //scene.add(ambientLight);
+      scene.add(ambientLight);
 
       const loader = new THREE.TextureLoader();
       loader.load('https://images.pexels.com/photos/11421550/pexels-photo-11421550.jpeg' , function(texture)
