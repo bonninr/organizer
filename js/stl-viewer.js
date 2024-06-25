@@ -40,8 +40,7 @@ class STLViewer extends HTMLElement {
     scene.add(new THREE.HemisphereLight(0xffffff, 1.5));
 
     const textureLoader = new THREE.TextureLoader();
-    const woodTexture = textureLoader.load('{st.get_media_url("media/Ash-Wood-Seamless-Texture-7.jpg")}'); // Replace with your texture URL
-
+    const woodTexture = textureLoader.load('https://images.pexels.com/photos/11421550/pexels-photo-11421550.jpeg')
       const geometry = new THREE.BoxGeometry();
       const material = new THREE.MeshStandardMaterial({
           map: woodTexture,
