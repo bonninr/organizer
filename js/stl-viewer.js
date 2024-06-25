@@ -69,18 +69,18 @@ class STLViewer extends HTMLElement {
       scene.add(cube);
 
 
-      const ambientLight = new THREE.AmbientLight(0x404040, 0.2); // soft white light
+      const ambientLight = new THREE.AmbientLight(0x404040, 0.3); // soft white light
       scene.add(ambientLight);
   
-      const keyLight = new THREE.SpotLight(0xffffff,  0.7);
+      const keyLight = new THREE.DirectionalLight(0xffffff,  0.7);
       keyLight.position.set(-100, 100, 100);
       scene.add(keyLight);
   
-      const fillLight = new THREE.SpotLight(0xffffff, 0.75);
+      const fillLight = new THREE.DirectionalLight(0xffffff, 0.75);
       fillLight.position.set(100, 100, 100);
       scene.add(fillLight);
   
-      const backLight = new THREE.SpotLight(0xffffff, 0.7);
+      const backLight = new THREE.DirectionalLight(0xffffff, 0.7);
       backLight.position.set(0, 10, -100);
       scene.add(backLight);
 
