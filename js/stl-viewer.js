@@ -76,13 +76,14 @@ class STLViewer extends HTMLElement {
       keyLight.position.set(-100, 100, 100);
       scene.add(keyLight);
 
-      const helper = new THREE.DirectionalLightHelper( keyLight, 100 );
-      scene.add( helper );
   
       const fillLight = new THREE.DirectionalLight(0xffffff, 0.75);
       fillLight.position.set(100, 100, 100);
       scene.add(fillLight);
-  
+        
+      const helper = new THREE.DirectionalLightHelper( fillLight, 100 );
+      scene.add( helper );
+
       const backLight = new THREE.DirectionalLight(0xffffff, 0.7);
       backLight.position.set(0, 10, -100);
       scene.add(backLight);
