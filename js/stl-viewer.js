@@ -9,6 +9,7 @@ class STLViewer extends HTMLElement {
 
   connectedCallback() {
     this.connected = true;
+
     const shadowRoot = this.attachShadow({ mode: 'open' });
     const container = document.createElement('div');
     container.style.width = '100%';
@@ -27,9 +28,21 @@ class STLViewer extends HTMLElement {
     let renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(container.clientWidth, container.clientHeight);
     container.appendChild(renderer.domElement);
-  
 
-    // Create a cube with wooden texture and glossy effect
+    window.addEventListener('resize', function () {
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+    }, false);
+
+    let controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableZoom = true;
+    
+    let scene = new THREE.Scene();
+    scene.add(new THREE.HemisphereLight(0xffffff, 0.5));
+    var ambientLight = new THREE.AmbientLight('#555');
+    scene.add(ambientLight);
+
     const geometry = new THREE.BoxGeometry();
     const material = new THREE.MeshStandardMaterial({
         roughness: 0.2,  // Low roughness for glossiness
@@ -37,28 +50,17 @@ class STLViewer extends HTMLElement {
     });
     const cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
-
-    // Position the camera
-    camera.position.z = 5;
-
-    // Add ambient light
-    const ambientLight = new THREE.AmbientLight(0x404040); // Soft white light
-    scene.add(ambientLight);
-
-    // Add spotlight for product showcase effect
-    const spotLight = new THREE.SpotLight(0xffffff);
-    spotLight.position.set(5, 5, 5);
-    spotLight.castShadow = true;
-    spotLight.angle = Math.PI / 6;
-    spotLight.penumbra = 0.1;
-    spotLight.decay = 2;
-    spotLight.distance = 200;
-    scene.add(spotLight);
-
-    // Add a point light for extra illumination
-    const pointLight = new THREE.PointLight(0xffffff, 1, 100);
-    pointLight.position.set(-5, -5, -5);
-    scene.add(pointLight);
+      
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 2;
+    let animate = () => {
+      controls.update();
+      renderer.render(scene, camera);
+      if (this.connected) {
+        requestAnimationFrame(animate);
+      }
+    };
+    animate();
   }
 
   disconnectedCallback() {
