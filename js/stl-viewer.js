@@ -51,7 +51,7 @@ class STLViewer extends HTMLElement {
       mesh.castShadow = true
       mesh.receiveShadow = true
       mesh.rotation.x = Math.PI *1.5  ;
-      scene.add(mesh);
+      //scene.add(mesh);
   
       const woodtextureLoader = new THREE.TextureLoader();
       const woodTexture = woodtextureLoader.load('https://raw.githubusercontent.com/sanches812/ash-wood-textures/main/Ash-Wood-Seamless-Texture-7.jpg'); // Replace with your texture URL
