@@ -104,6 +104,90 @@
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+
+		function createBoard(params, material) {
+			const {
+				maxWidth,
+				maxHeight,
+				boardThickness,
+				position,
+				rotation,
+				minWidth = 0,
+				minHeight = 0,
+				rectangularHoles = [],
+				circularHoles = []
+			} = params;
+
+			// Create shape for the board
+			const shape = new THREE.Shape();
+			
+			// If minHeight is 0, use maxHeight
+			const actualMinHeight = minHeight === 0 ? maxHeight : minHeight;
+
+			// Define the points for the shape
+			shape.moveTo(0, 0);
+			shape.lineTo(maxWidth, 0);
+			shape.lineTo(maxWidth, actualMinHeight);
+			
+			if (minWidth > 0) {
+				shape.lineTo(minWidth, maxHeight);
+			}
+			
+			shape.lineTo(0, maxHeight);
+			shape.lineTo(0, 0);
+
+			// Create holes
+			const holes = [];
+
+			// Add rectangular holes
+			rectangularHoles.forEach(hole => {
+				const [x, y, width, height] = hole;
+				const holeShape = new THREE.Shape();
+				holeShape.moveTo(x, y);
+				holeShape.lineTo(x + width, y);
+				holeShape.lineTo(x + width, y + height);
+				holeShape.lineTo(x, y + height);
+				holeShape.lineTo(x, y);
+				holes.push(holeShape);
+			});
+
+			// Add circular holes
+			circularHoles.forEach(hole => {
+				const [x, y, diameter] = hole;
+				const holeShape = new THREE.Shape();
+				const radius = diameter / 2;
+				holeShape.absarc(x, y, radius, 0, Math.PI * 2, false);
+				holes.push(holeShape);
+			});
+
+			shape.holes = holes;
+
+			// Create extrusion settings
+			const extrudeSettings = {
+				steps: 1,
+				depth: boardThickness,
+				bevelEnabled: false
+			};
+
+			// Create geometry and mesh
+			const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+
+			const board = new THREE.Mesh(geometry, material);
+
+			// Apply rotation
+			board.rotation.set(
+				THREE.MathUtils.degToRad(rotation[0]),
+				THREE.MathUtils.degToRad(rotation[1]),
+				THREE.MathUtils.degToRad(rotation[2])
+			);
+
+			// Apply position
+			board.position.set(position[0], position[1], position[2]);
+
+			return board;
+		}
+
+
         // Scene setup
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0xffffff);
@@ -126,13 +210,13 @@
         // Load textures
         const woodTextures = {
             "hardwood2_diffuse.jpg": 'https://threejs.org/examples/textures/hardwood2_diffuse.jpg',
-            "parquet.png": 'https://www.openpipes.org/wood.jpg',
+            "parquet.png": 'https://www.openpipes.org/beta/wood.jpg',
             "hardwood2_bump.jpg": 'https://threejs.org/examples/textures/hardwood2_bump.jpg',
         };
 
         const floorTextures = {
             "brick_diffuse.jpg": 'https://threejs.org/examples/textures/brick_diffuse.jpg',
-            "floor_tiles.jpg": 'https://www.openpipes.org/tile.jpg',
+            "floor_tiles.jpg": 'https://www.openpipes.org/beta/tile.jpg',
             "grasslight-big.jpg": 'https://threejs.org/examples/textures/grasslight-big.jpg',
         };
 
@@ -151,7 +235,32 @@
         const woodenBox = new THREE.Mesh(boxGeometry, boxMaterial);
         woodenBox.position.set(0, 0.5, 0); 
         woodenBox.castShadow = true;
-        scene.add(woodenBox);
+        //scene.add(woodenBox);
+		
+
+		
+				
+const boardParams71110 = {maxWidth: 0.7, maxHeight:1.6,minWidth: 0.0,minHeight: 0.0, boardThickness: 0.036,position: [0.0, 0.0, 0.0], rotation: [0, 0, 0], rectangularHoles: [], circularHoles:[]};
+scene.add(createBoard(boardParams71110, boxMaterial));
+const boardParams37989 = {maxWidth: 0.7, maxHeight:1.6,minWidth: 0.0,minHeight: 0.0, boardThickness: 0.036,position: [0.0, 0.0, -2.564], rotation: [0, 0, 0], rectangularHoles: [], circularHoles:[]};
+scene.add(createBoard(boardParams37989, boxMaterial));
+const boardParams40742 = {maxWidth: 2.6, maxHeight:1.6,minWidth: 0.0,minHeight: 0.0, boardThickness: 0.036,position: [0.036, 0.0, 0.036], rotation: [0, 90, 0], rectangularHoles: [], circularHoles:[]};
+scene.add(createBoard(boardParams40742, boxMaterial));
+const boardParams53869 = {maxWidth: 2.6, maxHeight:1.6,minWidth: 0.0,minHeight: 0.0, boardThickness: 0.036,position: [0.5, 0.0, 0.036], rotation: [0, 90, 0], rectangularHoles: [], circularHoles:[]};
+scene.add(createBoard(boardParams53869, boxMaterial));
+const boardParams72728 = {maxWidth: 2.6, maxHeight:1.3,minWidth: 0.0,minHeight: 0.0, boardThickness: 0.036,position: [0.036, 1.6, 0.0], rotation: [90, 0, -90], rectangularHoles: [], circularHoles:[]};
+scene.add(createBoard(boardParams72728, boxMaterial));
+const boardParams91004 = {maxWidth: 1.3, maxHeight:0.7,minWidth: 0.7,minHeight: 0.3, boardThickness: 0.036,position: [0.036, 1.6, 0.0], rotation: [0, 0, 0], rectangularHoles: [], circularHoles:[]};
+scene.add(createBoard(boardParams91004, boxMaterial));
+const boardParams67787 = {maxWidth: 1.3, maxHeight:0.7,minWidth: 0.7,minHeight: 0.3, boardThickness: 0.036,position: [0.0, 1.6, -2.528], rotation: [0, 0, 0], rectangularHoles: [], circularHoles:[]};
+scene.add(createBoard(boardParams67787, boxMaterial));
+const boardParams75520 = {maxWidth: 2.6, maxHeight:0.628,minWidth: 0.0,minHeight: 0.0, boardThickness: 0.036,position: [0.036, 1.636, 0.036], rotation: [0, 90, 0], rectangularHoles: [], circularHoles:[]};
+scene.add(createBoard(boardParams75520, boxMaterial));
+const boardParams99717 = {maxWidth: 2.6, maxHeight:0.628,minWidth: 0.0,minHeight: 0.0, boardThickness: 0.036,position: [0.7, 1.636, 0.036], rotation: [0, 90, 0], rectangularHoles: [], circularHoles:[]};
+scene.add(createBoard(boardParams99717, boxMaterial));
+const boardParams32825 = {maxWidth: 2.6, maxHeight:0.7,minWidth: 0.0,minHeight: 0.0, boardThickness: 0.036,position: [0.036, 2.264, 0.0], rotation: [90, 0, -90], rectangularHoles: [], circularHoles:[]};
+scene.add(createBoard(boardParams32825, boxMaterial));
+				
 
         // Lighting
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);

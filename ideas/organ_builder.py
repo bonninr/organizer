@@ -1,5 +1,8 @@
 import cadquery as cq
 from ocp_vscode import *
+import random
+import string
+
 
 class DotDict:
     def __init__(self, nested_dict):
@@ -12,6 +15,14 @@ class DotDict:
                     setattr(self, key, value)
 
 def create_board(max_width, max_height, board_thickness, position, rotation, min_width=0, min_height=0, rectangular_holes=[], circular_holes=[]):
+    
+    counter = str(random.randint(0, 100000))
+    rot0=rotation[0]==90
+    rot0, rot1, rot2 = rotation[0:3]
+    if (rot1==90):
+        rot0, rot1, rot2 = 90,-90,0 
+    print ('const boardParams{} = {{maxWidth: {}, maxHeight:{},minWidth: {},minHeight: {}, boardThickness: {},position: {}, rotation: {}, rectangularHoles: [], circularHoles:[]}};'.format(counter, max_width/500, max_height/500, min_width/500, min_height/500, board_thickness/500, [position[1]/500, position[2]/500, position[0]/500], [rot0, rot2, rot1]))
+    print ('scene.add(createBoard(boardParams{}, boxMaterial));'.format(counter))
     # Set the min height equal to max height if it's zero (for full rectangle)
     if min_height == 0:
         min_height = max_height
