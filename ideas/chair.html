@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>3D Showroom with Light Controls</title>
+    <style>
+        body { margin: 0; }
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+            background-color: white;
+            overflow: hidden;
+        }
+        #menu {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+        .control {
+            margin-bottom: 10px;
+        }
+        .slider, select {
+            width: 150px;
+        }
+    </style>
+    <script async src="https://unpkg.com/es-module-shims/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.159.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.159.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="canvas-container"></div>
+    <div id="menu">
+        <div class="control">
+            <label>Rotation Speed: 
+                <input type="range" id="rotationSpeed" class="slider" min="0" max="0.1" step="0.01" value="0.01">
+            </label>
+        </div>
+        <div class="control">
+            <label>Wood Texture: 
+                <select id="woodTexture">
+                    <option value="hardwood2_diffuse.jpg">Hardwood 1</option>
+                    <option value="parquet.png">Parquet</option>
+                    <option value="hardwood2_bump.jpg">Hardwood 2</option>
+                </select>
+            </label>
+        </div>
+        <div class="control">
+            <label>Floor Texture: 
+                <select id="floorTexture">
+                    <option value="brick_diffuse.jpg">Brick</option>
+                    <option value="floor_tiles.jpg">Tiles</option>
+                    <option value="grasslight-big.jpg">Grass</option>
+                </select>
+            </label>
+        </div>
+        <div class="control">
+            <label>Clearcoat: 
+                <input type="range" id="clearcoat" class="slider" min="0" max="1" step="0.01" value="1">
+            </label>
+        </div>
+        <div class="control">
+            <label>Roughness: 
+                <input type="range" id="roughness" class="slider" min="0" max="1" step="0.01" value="0.1">
+            </label>
+        </div>
+        <div class="control">
+            <label>Clearcoat Roughness: 
+                <input type="range" id="clearcoatRoughness" class="slider" min="0" max="1" step="0.01" value="0.1">
+            </label>
+        </div>
+        <div class="control">
+            <label>Ambient Light: 
+                <input type="range" id="ambientIntensity" class="slider" min="0" max="3" step="0.1" value="0.3">
+            </label>
+        </div>
+        <div class="control">
+            <label>Directional Light: 
+                <input type="range" id="directionalIntensity" class="slider" min="0" max="3" step="0.1" value="1">
+            </label>
+        </div>
+        <div class="control">
+            <label>Lateral Light 1: 
+                <input type="range" id="lateralLight1Intensity" class="slider" min="0" max="3" step="0.1" value="0.5">
+            </label>
+        </div>
+        <div class="control">
+            <label>Lateral Light 2: 
+                <input type="range" id="lateralLight2Intensity" class="slider" min="0" max="3" step="0.1" value="0.5">
+            </label>
+        </div>
+    </div>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        // Scene setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xffffff);
+        
+        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ 
+            antialias: true,
+            alpha: true
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        // Camera position
+        camera.position.set(5, 5, 5);
+
+        const textureLoader = new THREE.TextureLoader();
+
+        // Load textures
+        const woodTextures = {
+            "hardwood2_diffuse.jpg": 'https://threejs.org/examples/textures/hardwood2_diffuse.jpg',
+            "parquet.png": 'https://www.openpipes.org/wood.jpg',
+            "hardwood2_bump.jpg": 'https://threejs.org/examples/textures/hardwood2_bump.jpg',
+        };
+
+        const floorTextures = {
+            "brick_diffuse.jpg": 'https://threejs.org/examples/textures/brick_diffuse.jpg',
+            "floor_tiles.jpg": 'https://www.openpipes.org/tile.jpg',
+            "grasslight-big.jpg": 'https://threejs.org/examples/textures/grasslight-big.jpg',
+        };
+
+        // Box
+        const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
+        const boxMaterial = new THREE.MeshPhysicalMaterial({
+            map: textureLoader.load(woodTextures["hardwood2_diffuse.jpg"]),
+            metalness: 0.0,
+            roughness: 0.1,
+            clearcoat: 1.0,
+            clearcoatRoughness: 0.1,
+            reflectivity: 1.0,
+            envMapIntensity: 1.0
+        });
+
+        const woodenBox = new THREE.Mesh(boxGeometry, boxMaterial);
+        woodenBox.position.set(0, 0.5, 0); 
+        woodenBox.castShadow = true;
+        scene.add(woodenBox);
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(5, 5, 5);
+        directionalLight.castShadow = true;
+        scene.add(directionalLight);
+
+        const lateralLight1 = new THREE.PointLight(0xffffff, 0.5, 100);
+        lateralLight1.position.set(-5, 5, 5);
+        scene.add(lateralLight1);
+
+        const lateralLight2 = new THREE.PointLight(0xffffff, 0.5, 100);
+        lateralLight2.position.set(5, 5, 5);
+        scene.add(lateralLight2);
+
+        // Spotlights
+        const spotLightCount = 6; // Number of spotlights to surround the object
+        const radius = 5; // Radius of the circle on which the spotlights are positioned
+        const spotLights = []; // Array to hold the spotlights
+
+        for (let i = 0; i < spotLightCount; i++) {
+            const angle = (i / spotLightCount) * Math.PI * 2;
+            const x = Math.cos(angle) * radius;
+            const z = Math.sin(angle) * radius;
+            
+            const spotLight = new THREE.SpotLight(0xffffff, 0.8);
+            spotLight.position.set(x, 5, z);
+            spotLight.angle = Math.PI / 8;
+            spotLight.penumbra = 0.1;
+            spotLight.decay = 2;
+            spotLight.distance = 20;
+            spotLight.castShadow = true;
+            scene.add(spotLight);
+            spotLights.push(spotLight);
+        }
+
+        // Ground plane
+        const groundGeometry = new THREE.PlaneGeometry(10, 10);
+        const groundMaterial = new THREE.MeshStandardMaterial({ 
+            map: textureLoader.load(floorTextures["brick_diffuse.jpg"]),
+            roughness: 0.0, // Ultra glossy
+            metalness: 0.2
+        });
+        const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+        ground.rotation.x = -Math.PI / 2;
+        ground.position.y = 0;
+        ground.receiveShadow = true;
+        scene.add(ground);
+
+        // Environment map for reflections
+        const envTextureLoader = new THREE.CubeTextureLoader();
+        const envMap = envTextureLoader.load([
+            'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/cube/Park2/posx.jpg',
+            'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/cube/Park2/negx.jpg',
+            'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/cube/Park2/posy.jpg',
+            'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/cube/Park2/negy.jpg',
+            'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/cube/Park2/posz.jpg',
+            'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/cube/Park2/negz.jpg',
+        ]);
+        scene.environment = envMap;
+
+        // OrbitControls
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.minPolarAngle = Math.PI / 6;
+        controls.maxPolarAngle = Math.PI / 2;
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+
+        // Get input elements
+        const rotationSpeedInput = document.getElementById('rotationSpeed');
+        const woodTextureSelect = document.getElementById('woodTexture');
+        const floorTextureSelect = document.getElementById('floorTexture');
+        const clearcoatInput = document.getElementById('clearcoat');
+        const roughnessInput = document.getElementById('roughness');
+        const clearcoatRoughnessInput = document.getElementById('clearcoatRoughness');
+        const ambientIntensityInput = document.getElementById('ambientIntensity');
+        const directionalIntensityInput = document.getElementById('directionalIntensity');
+        const lateralLight1IntensityInput = document.getElementById('lateralLight1Intensity');
+        const lateralLight2IntensityInput = document.getElementById('lateralLight2Intensity');
+
+        let rotationSpeed = parseFloat(rotationSpeedInput.value);
+
+        // Handle input changes
+        rotationSpeedInput.addEventListener('input', () => rotationSpeed = parseFloat(rotationSpeedInput.value));
+
+        woodTextureSelect.addEventListener('change', (event) => {
+            const selectedTexture = event.target.value;
+            boxMaterial.map = textureLoader.load(woodTextures[selectedTexture]);
+            boxMaterial.map.needsUpdate = true;
+        });
+
+        floorTextureSelect.addEventListener('change', (event) => {
+            const selectedTexture = event.target.value;
+            groundMaterial.map = textureLoader.load(floorTextures[selectedTexture]);
+            groundMaterial.map.needsUpdate = true;
+        });
+
+        clearcoatInput.addEventListener('input', () => {
+            boxMaterial.clearcoat = parseFloat(clearcoatInput.value);
+            boxMaterial.needsUpdate = true;
+        });
+
+        roughnessInput.addEventListener('input', () => {
+            boxMaterial.roughness = parseFloat(roughnessInput.value);
+            boxMaterial.needsUpdate = true;
+        });
+
+        clearcoatRoughnessInput.addEventListener('input', () => {
+            boxMaterial.clearcoatRoughness = parseFloat(clearcoatRoughnessInput.value);
+            boxMaterial.needsUpdate = true;
+        });
+
+        ambientIntensityInput.addEventListener('input', () => ambientLight.intensity = parseFloat(ambientIntensityInput.value));
+        directionalIntensityInput.addEventListener('input', () => directionalLight.intensity = parseFloat(directionalIntensityInput.value));
+        lateralLight1IntensityInput.addEventListener('input', () => lateralLight1.intensity = parseFloat(lateralLight1IntensityInput.value));
+        lateralLight2IntensityInput.addEventListener('input', () => lateralLight2.intensity = parseFloat(lateralLight2IntensityInput.value));
+
+        // Animation
+        function animate() {
+            requestAnimationFrame(animate);
+            woodenBox.rotation.y += rotationSpeed;
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', onWindowResize, false);
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
